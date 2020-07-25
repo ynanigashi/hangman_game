@@ -6,9 +6,30 @@ def wait_enter():
     print("press enter!")
     input()
 
-file_path = "./word_list.txt"
-with open(file_path) as f:
+word_list_path = "./word_list.txt"
+with open(word_list_path) as f:
     word_list = [s.strip() for s in f.readlines()]
+
+hangman_path = "./hangman.txt"
+mask_path = "./mask.txt"
+hangman_AA = []
+mask_AA = []
+
+with open(hangman_path) as f:
+    hangman_AA = [s.rstrip() for s in f.readlines()]
+
+with open(mask_path) as f:
+    mask_AA = [s.rstrip() for s in f.readlines()]
+
+def display_hangman(life_cnt):
+    for h_line, m_line in zip(hangman_AA, mask_AA):
+        d_line = []
+        for h_str, m_str in zip(h_line, m_line):
+            if m_str != ' ' and int(m_str) <= 6 - life_cnt:
+                d_line.append(h_str)
+            else:
+                d_line.append(' ')
+        print(''.join(d_line))
 
 # select word
 ans_word = random.choice(word_list)
@@ -17,6 +38,8 @@ life_cnt = 6
 input_chr_list = []
 while True:
     os.system("clear")
+    display_hangman(life_cnt)
+    print()
     display = [c if c in input_chr_list else '_' for c in ans_word]
     print('='*(len(ans_word)*2-1))
     print(" ".join(display))
